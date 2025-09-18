@@ -1,0 +1,594 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #f8f9fa;
+  --text: #222;
+  --sidebar-bg: #343a40;
+  --sidebar-text: #ffffff;
+  --primary: #0d6efd;
+  --active-bg: rgba(13, 110, 253, 0.15);
+  --active-text: #0d6efd;
+  --hover-bg: rgba(255, 255, 255, 0.10);
+
+  --card-bg: #ffffff;
+  --card-text: #222;
+  --card-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition:  0.3s ease, color 0.3s ease;
+}
+
+/* dark mode overrides */
+.dark-mode {
+  --bg: #000;
+  --text: #fff;
+  --sidebar-bg: #111;
+  --sidebar-text: #ddd;
+  --primary: #4dabf7;
+  --active-bg: rgba(77,171,247,0.20);
+  --active-text: #4dabf7;
+  --hover-bg: rgba(255,255,255,0.08);
+
+  --card-bg: #2a2a2a;
+  --card-text: #fff;
+  --card-shadow: 0 2px 6px rgba(255,255,255,0.1);
+}
+
+/* layout */
+.app-layout { display: flex; height: 100vh; }
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* pushes footer to bottom */
+  width: 250px;
+  padding: 1rem;
+  background: var(--sidebar-bg, #1f2937);
+  color: white;
+}
+.sidebar h2 { margin-bottom: 20px; font-size: 20px; font-weight: 700; }
+.sidebar ul { list-style: none; display: grid; gap: 6px; }
+.sidebar-footer {
+  margin-top: auto; /* ensures toggle stays at bottom */
+}
+
+/* nav items */
+.nav-item {
+  width: 100%;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  color: inherit;
+  border-radius: 10px;
+  cursor: pointer;
+  transition:  0.2s ease, color 0.2s ease, transform 0.05s ease;
+}
+.nav-item:hover { background: var(--hover-bg); }
+.nav-item:active { transform: translateY(1px); }
+.nav-item:focus-visible { outline: 2px solid var(--active-text); outline-offset: 2px; }
+.nav-item.active { background: var(--active-bg); color: var(--active-text); font-weight: 600; }
+.nav-item .icon { display: grid; place-items: center; width: 18px; height: 18px; }
+
+/* main */
+.main-content { flex: 1; padding: 24px; background: var(--bg); color: var(--text); }
+.main-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px;
+}
+.toggle-btn {
+  padding: 8px 14px;
+  border: none; border-radius: 8px;
+  background: var(--primary); color: #fff;
+  cursor: pointer;
+}
+
+/* Dashboard */
+.dashboard { padding: 2rem; }
+.dashboard h1 { margin-bottom: 1.5rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+.card {
+  background: var(--card-bg);
+  color: var(--card-text);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { transform: translateY(-4px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+.card-icon { font-size: 2rem; margin-bottom: 1rem; }
+
+/* Tasks */
+.tasks-page { max-width: 600px; margin: auto; }
+.task-form { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.task-form input {
+  flex: 1; padding: 0.5rem;
+  border-radius: 6px; border: 1px solid #ccc;
+}
+.dark-mode .task-form input {
+  background: #222; color: white; border: 1px solid #555;
+}
+.task-form button {
+  padding: 0.5rem 1rem; border: none; border-radius: 6px;
+  background: #4f46e5; color: white; cursor: pointer;
+}
+
+/* Task Card (merged task-item + task-card) */
+.tasks-container {
+  display: flex;
+  flex-wrap: wrap;  /* allows wrapping on small screens */
+  gap: 1rem;
+  justify-content: center;
+  padding: 1rem;
+}
+.task-card {
+  flex: 1 1 300px;   /* grows/shrinks, min 300px */
+  max-width: 100%;
+  background: #1e1e2f;
+  padding: 1rem;
+  border-radius: 8px;
+  color: #fff;
+}
+.task-card.completed {
+  opacity: 0.7; text-decoration: line-through; background: #d4f5d0;
+}
+.dark-mode .task-card.completed { background: #3a3a3a; }
+.task-actions button { margin-left: 0.5rem; }
+.delete-btn { background: transparent; border: none; cursor: pointer; font-size: 1.1rem; }
+
+/* Mobile tweaks */
+@media (max-width: 600px) {
+  .tasks-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .task-card {
+    width: 100%;    /* full width on mobile */
+    font-size: 0.9rem;
+  }
+}
+
+/* Motivation */
+.motivation {
+  margin-top: 1rem; padding: 1rem;
+  background: #e6ffe6; border: 1px solid #b3ffb3;
+  border-radius: 8px; font-weight: bold; text-align: center;
+}
+.dark-mode .motivation {
+  background: #004d00; border: 1px solid #00cc00; color: #e0ffe0;
+}
+
+/* Category Filter */
+.category-filter {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  cursor: pointer;
+  transition: 0.2s ease, transform 0.05s ease;
+}
+
+.filter-btn:hover {
+  background: var(--hover-bg);
+}
+
+.filter-btn.active {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Task category label */
+.task-category {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+  background: #e9ecef;
+  color: #333;
+}
+
+body.dark-mode .task-category {
+  background: #333;
+  color: #ddd;
+}
+
+/* Courses Page */
+.courses-page {
+  max-width: 900px;
+  margin: auto;
+}
+
+.course-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.course-form input {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.course-form input[type="color"] {
+  width: 60px;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
+.course-form button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background: #4f46e5;
+  color: white;
+  cursor: pointer;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.course-card {
+  background: var(--card-bg, #fff);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.3s ease, color 0.3s ease;
+}
+
+.course-card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.course-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.course-info {
+  flex: 1;
+}
+
+body.dark-mode .course-card {
+  background: #2a2a2a;
+  color: white;
+  box-shadow: 0 2px 6px rgba(255,255,255,0.1);
+}
+
+/* === Calendar Styles === */
+.calendar-page {
+  padding: 2rem;
+}
+
+.calendar-page h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.event-form {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap; /* better for small screens */
+}
+
+.event-form input,
+.event-form button {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+.event-form input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.event-form button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition:0.2s;
+}
+
+.event-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Events grid */
+.events-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.event-card {
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s;
+}
+
+.event-card:hover {
+  transform: translateY(-3px);
+}
+
+.event-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.event-card p {
+  margin: 0 0 1rem;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.event-card button {
+  background: #dc3545;
+  border: none;
+  color: white;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:  0.2s;
+}
+
+.event-card button:hover {
+  background: #a71d2a;
+}
+
+/* Motivational text */
+.motivation {
+  font-size: 1.1rem;
+  color: #666;
+  text-align: center;
+  margin-top: 2rem;
+}
+body.dark-mode .event-card {
+  background: #2a2a2a;
+  color: white;
+  box-shadow: 0 4px 6px rgba(255,255,255,0.1);
+}
+
+/* === Notes Section === */
+.notes-page {
+  padding: 2rem;
+}
+
+.note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 500px;
+  margin-bottom: 2rem;
+}
+
+.note-form input,
+.note-form textarea {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.note-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.note-form button {
+  align-self: flex-start;
+  padding: 0.6rem 1.2rem;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:  0.2s;
+}
+
+.note-form button:hover {
+  background: #3730a3;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.note-card {
+  background: var(--card-bg, #fff);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+
+.note-card:hover {
+  transform: translateY(-3px);
+}
+
+.note-card h3 {
+  margin: 0 0 0.5rem;
+}
+
+.note-card p {
+  margin: 0 0 1rem;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.note-card .delete-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.note-card .delete-btn:hover {
+  background: #a71d2a;
+}
+
+/* dark mode */
+body.dark-mode .note-card {
+  background: #2a2a2a;
+  color: white;
+}
+
+
+/* === Pomodoro Timer === */
+.pomodoro-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.pomodoro-timer {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: auto;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.mode {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.controls button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  background: #4f46e5;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.controls button:hover {
+  background: #3730a3;
+}
+
+.motivation {
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+/* dark mode */
+body.dark-mode .circle {
+  background: #4444aa;
+}
+
+/* Settings Page */
+.settings-page {
+  max-width: 600px;
+  margin: auto;
+  padding: 2rem;
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: 0.3s, color 0.3s;
+}
+
+.settings-page h1 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.settings-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.settings-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+}
+
+.settings-form input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 0.25rem;
+}
+
+.settings-form button {
+  padding: 0.6rem 1.2rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition:  0.3s ease;
+}
+
+.settings-form button:hover {
+  background: #0b5ed7;
+}
+
+/* Dark mode */
+body.dark-mode .settings-page {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+body.dark-mode .settings-form input {
+  background: #222;
+  border: 1px solid #555;
+  color: #fff;
+}  
